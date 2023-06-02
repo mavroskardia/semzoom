@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { animationStyles } from "../animations";
+import "./semzoom-testing";
 
 @customElement("semzoom-nav")
 export class SemzoomNav extends LitElement {
@@ -47,13 +48,14 @@ export class SemzoomNav extends LitElement {
       .opened {
         animation: slide-right 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       }
-
     `,
   ];
 
   render() {
     return html`
-      <nav class="closed"></nav>
+      <nav class="closed">
+        <semzoom-testing></semzoom-testing>
+      </nav>
       <button @click="${this.toggle}">
         <svg viewBox="0 0 10 8" width="30">
           <path d="M1 1h8M1 4h 8M1 7h8" />
@@ -63,7 +65,7 @@ export class SemzoomNav extends LitElement {
   }
 
   toggle() {
-    this.nav.classList.toggle('opened');
+    this.nav.classList.toggle("opened");
   }
 }
 
