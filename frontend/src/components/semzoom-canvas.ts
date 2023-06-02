@@ -2,50 +2,64 @@ import { LitElement, html, css } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { SemzoomContent } from "../types/content";
 import { SemzoomContenter } from "../lib/contenter";
+import { animationStyles } from "../animations";
 
 @customElement("semzoom-canvas")
 export class SemzoomCanvas extends LitElement {
   @query("main") main!: HTMLElement;
-  @query('aside.buffer') buffer!: HTMLElement;
+  @query("aside.buffer") buffer!: HTMLElement;
 
   contenter = new SemzoomContenter();
 
+  render() {
+    return html`
+      <button hidden="${history.length==0}">&larr; BACK</button>
+      <main><slot name="content"></slot></main>
+      <aside class="buffer" hidden></aside>
+    `;
+  }
+
+  firstUpdated() {
+    this.main.addEventListener("animationend", () => {});
+    this.buffer.addEventListener("animationend", () => {});
+  }
+
+  load(data: SemzoomContent, animate: boolean = false) {
+    if (animate) {}
+    this.main.innerHTML = this.contenter.make_content(data);
+  }
+
   static styles = [
+    animationStyles,
     css`
       :host {
+        height: 100vh;
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
       }
+
       .buffer {
         position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(255,255,255,0.25);
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      main {
+        z-index: 1;
+        display: block;
+        border: solid 1px #f90;
+      }
+
+      button {
+        position: absolute;
+        top: 1rem;
+        left: 4rem;
+        height: 26px;
       }
     `,
   ];
-
-  connectedCallback(): void {
-    this.buffer.hidden = true;
-  }
-
-  render() {
-    return html`<aside class="buffer"></aside><main></main>`;
-  }
-
-  load(data: SemzoomContent) {
-    this.buffer.innerHTML = this.main.innerHTML;
-    this.main.hidden = true;
-    this.main.innerHTML = this.contenter.make_content(data);
-    this.buffer.hidden = false;
-    this.animate_swap();
-  }
-
-  animate_swap() {
-    // where this gets interesting. need to animate one element to the
-    // other in a meaningful way, but I have no idea how to do it (yet).
-  }
-
 }
 
 declare global {

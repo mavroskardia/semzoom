@@ -7,6 +7,23 @@ import "./semzoom-testing";
 export class SemzoomNav extends LitElement {
   @query("nav") nav!: HTMLElement;
 
+  render() {
+    return html`
+      <nav class="closed">
+        <semzoom-testing @test="${this.toggle}"></semzoom-testing>
+      </nav>
+      <button @click="${this.toggle}">
+        <svg viewBox="0 0 10 8" width="30">
+          <path d="M1 1h8M1 4h 8M1 7h8" />
+        </svg>
+      </button>
+    `;
+  }
+
+  toggle() {
+    this.nav.classList.toggle("opened");
+  }
+
   static styles = [
     animationStyles,
     css`
@@ -50,23 +67,6 @@ export class SemzoomNav extends LitElement {
       }
     `,
   ];
-
-  render() {
-    return html`
-      <nav class="closed">
-        <semzoom-testing></semzoom-testing>
-      </nav>
-      <button @click="${this.toggle}">
-        <svg viewBox="0 0 10 8" width="30">
-          <path d="M1 1h8M1 4h 8M1 7h8" />
-        </svg>
-      </button>
-    `;
-  }
-
-  toggle() {
-    this.nav.classList.toggle("opened");
-  }
 }
 
 declare global {

@@ -4,10 +4,13 @@ import { SemzoomCanvas } from "./components/semzoom-canvas";
 import { SemzoomNav } from "./components/semzoom-nav";
 import { SemzoomContent, missingSemzoomContent } from "./types/content";
 
+import { router } from "./index";
+
 import "./components/semzoom-nav";
 import "./components/semzoom-canvas";
 import "./components/semzoom-footer";
 
+/** The SemZoom application element */
 @customElement("sem-zoom")
 export class SemZoom extends LitElement {
   @query("semzoom-nav") thenav!: SemzoomNav;
@@ -15,16 +18,28 @@ export class SemZoom extends LitElement {
 
   content!: SemzoomContent;
   current_content!: SemzoomContent;
+  router = router;
 
   constructor() {
     super();
     this.attachEvents();
   }
 
+  connectedCallback(): void {
+    // pull up the relevant top-level content and navigate into the topic specified
+    const contentid = router.location.params.contentid;
+    console.log(`would load content with id ${contentid}`);
+
+    const topicid = router.location.params.topicid;
+    console.log(`...and would navigate to subtopic ${topicid}`);
+  }
+
   render() {
     return html`
       <semzoom-nav @test="${this.test}"></semzoom-nav>
-      <semzoom-canvas></semzoom-canvas>
+      <semzoom-canvas>
+        <div id="content" slot="content"></div>
+      </semzoom-canvas>
       <semzoom-footer></semzoom-footer>
     `;
   }
@@ -39,7 +54,7 @@ export class SemZoom extends LitElement {
 
   set_content_id(content_id: number) {
     this.current_content = this.find_content_by_id(this.content, content_id);
-    this.thecanvas.load(this.current_content);
+    this.thecanvas.load(this.current_content, content_id != 0);
   }
 
   find_content_by_id(root: SemzoomContent, content_id: number): SemzoomContent {
@@ -56,7 +71,6 @@ export class SemZoom extends LitElement {
   test(test_event: CustomEvent) {
     this.content = test_event.detail;
     this.set_content_id(0); // set to root
-    this.nav
   }
 
   static styles = [

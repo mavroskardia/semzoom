@@ -19,13 +19,12 @@ def example():
         "content": """
             <div>
                 <p>
-                    Seems like the content can be HTML, but then I might
-                    have to hijack anchor tags?
-                    <a href="#1">To first child</a>
+                    Main Topic
+                    <a href="/1">To first sub-topic</a>
                 </p>
                 <p>
                     Maybe that's fine.
-                    <a href="#2">To second child</a>
+                    <a href="/2">To second sub-topic</a>
                 </p>
             </div>
         """,
@@ -33,13 +32,22 @@ def example():
             {
                 "id": 1,
                 "metadata": {},
-                "content": """<p>bottom of this branch</p>""",
-                "children": [],
+                "content": """
+                <p>Sub-topic 1 <a href="/3">Deeper on this topic</a></p>
+                """,
+                "children": [
+                    {
+                        "id": 3,
+                        "metadata": {},
+                        "content": """Deep dive on first sub-topic""",
+                        "children": [],
+                    }
+                ],
             },
             {
                 "id": 2,
                 "metadata": {},
-                "content": """<p>bottom of the second branch</p>""",
+                "content": """<p>Sub-topic 2</p>""",
                 "children": [],
             },
         ],
