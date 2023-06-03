@@ -11,9 +11,11 @@
   "dependencies": {
     "@vaadin/router": "^1.7.5",
     "d3": "^7.8.4",
-    "lit": "^2.7.2"
+    "lit": "^2.7.2",
+    "showdown": "^2.1.0"
   },
   "devDependencies": {
+    "@types/showdown": "^2.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
   }

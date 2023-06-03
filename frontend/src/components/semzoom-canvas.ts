@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement, query } from "lit/decorators.js";
+
 import { SemzoomContent } from "../types/content";
 import { SemzoomContenter } from "../lib/contenter";
 import { animationStyles } from "../animations";
@@ -7,15 +8,15 @@ import { animationStyles } from "../animations";
 @customElement("semzoom-canvas")
 export class SemzoomCanvas extends LitElement {
   @query("main") main!: HTMLElement;
-  @query("aside.buffer") buffer!: HTMLElement;
+  @query("aside") buffer!: HTMLElement;
 
   contenter = new SemzoomContenter();
 
   render() {
     return html`
-      <button hidden="${history.length==0}">&larr; BACK</button>
+      <button>&larr; BACK</button>
       <main><slot name="content"></slot></main>
-      <aside class="buffer" hidden></aside>
+      <aside hidden></aside>
     `;
   }
 
@@ -40,7 +41,7 @@ export class SemzoomCanvas extends LitElement {
         justify-content: center;
       }
 
-      .buffer {
+      aside {
         position: absolute;
         z-index: 2;
         pointer-events: none;

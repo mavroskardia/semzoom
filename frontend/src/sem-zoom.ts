@@ -17,26 +17,26 @@ export class SemZoom extends LitElement {
   @query("semzoom-canvas") thecanvas!: SemzoomCanvas;
 
   content!: SemzoomContent;
-  current_content!: SemzoomContent;
+  current_topic!: SemzoomContent;
   router = router;
 
-  constructor() {
-    super();
-    this.attachEvents();
-  }
-
   connectedCallback(): void {
+    super.connectedCallback();
     // pull up the relevant top-level content and navigate into the topic specified
     const contentid = router.location.params.contentid;
-    console.log(`would load content with id ${contentid}`);
+    this.load_content(contentid.toString());
+  }
 
-    const topicid = router.location.params.topicid;
-    console.log(`...and would navigate to subtopic ${topicid}`);
+  async load_content(contentid:string) {
+    console.log(`loading content with id ${contentid}`);
+    const url = new URL(`http://localhost:5000/${contentid}`);
+    this.content = await (await fetch(url)).json();
+    this.thecanvas.load(this.content);
   }
 
   render() {
     return html`
-      <semzoom-nav @test="${this.test}"></semzoom-nav>
+      <semzoom-nav></semzoom-nav>
       <semzoom-canvas>
         <div id="content" slot="content"></div>
       </semzoom-canvas>
@@ -44,33 +44,20 @@ export class SemZoom extends LitElement {
     `;
   }
 
-  attachEvents() {
-    window.addEventListener("hashchange", (evt: HashChangeEvent) => {
-      const url = new URL(evt.newURL);
-      const id = url.hash ? parseInt(url.hash.substring(1)) : 0;
-      this.set_content_id(id);
-    });
+  set_topic_id(topicid: number) {
+    this.current_topic = this.find_topic_by_id(this.content, topicid);
+    this.thecanvas.load(this.current_topic, true);
   }
 
-  set_content_id(content_id: number) {
-    this.current_content = this.find_content_by_id(this.content, content_id);
-    this.thecanvas.load(this.current_content, content_id != 0);
-  }
-
-  find_content_by_id(root: SemzoomContent, content_id: number): SemzoomContent {
-    if (root.id == content_id) return root;
+  find_topic_by_id(root: SemzoomContent, topicid: number): SemzoomContent {
+    if (root.id == topicid) return root;
 
     for (let i = 0; i < root.children.length; i++) {
-      const found = this.find_content_by_id(root.children[i], content_id);
+      const found = this.find_topic_by_id(root.children[i], topicid);
       if (found != missingSemzoomContent) return found;
     }
 
     return missingSemzoomContent;
-  }
-
-  test(test_event: CustomEvent) {
-    this.content = test_event.detail;
-    this.set_content_id(0); // set to root
   }
 
   static styles = [

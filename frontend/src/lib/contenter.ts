@@ -1,14 +1,12 @@
+import { Converter } from "showdown";
 import { SemzoomContent } from "../types/content";
 
 export class SemzoomContenter {
-
-  back_link = `<a href="#0">&laquo; Back</a>`;
+  converter = new Converter();
 
   make_content(data: SemzoomContent) {
-    const elt = document.createElement("div");
-    elt.innerHTML = `${this.back_link}${data.content}`;
-    // [].map.call(elt.querySelectorAll("a"), this.hijack_anchor);
-    return elt.innerHTML;
+    // first, clean up the content by removing any leading whitespace
+    let content = data.content.split('\n').map(line => line.trim()).join('\n')
+    return this.converter.makeHtml(content);
   }
-
 }
