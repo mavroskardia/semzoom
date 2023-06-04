@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
-import { animationStyles } from "../animations";
+import { customElement, query } from "lit/decorators.js";
+import { animationStyles } from "./molecules/animations";
 import "./semzoom-testing";
 
 @customElement("semzoom-nav")
@@ -9,7 +9,7 @@ export class SemzoomNav extends LitElement {
 
   render() {
     return html`
-      <nav class="closed">
+      <nav>
         <semzoom-testing @test="${this.toggle}"></semzoom-testing>
       </nav>
       <button @click="${this.toggle}">
@@ -22,6 +22,11 @@ export class SemzoomNav extends LitElement {
 
   toggle() {
     this.nav.classList.toggle("opened");
+    if (!this.nav.classList.contains('opened')) {
+      this.nav.classList.add('closing');
+    } else {
+      this.nav.classList.remove('closing');
+    }
   }
 
   static styles = [
@@ -58,13 +63,18 @@ export class SemzoomNav extends LitElement {
         border-right: solid 1px #444;
         z-index: 0;
         top: 0;
+        left: calc(-1 * var(--menu-width, 200px));
         background-color: rgba(255, 255, 255, 0.1);
-        animation: slide-left 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       }
 
       .opened {
         animation: slide-right 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       }
+
+      .closing {
+        animation: slide-left 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
     `,
   ];
 }

@@ -3,7 +3,7 @@ import { customElement, query } from "lit/decorators.js";
 
 import { SemzoomContent } from "../types/content";
 import { SemzoomContenter } from "../lib/contenter";
-import { animationStyles } from "../animations";
+import { animationStyles } from "./molecules/animations";
 
 @customElement("semzoom-canvas")
 export class SemzoomCanvas extends LitElement {
@@ -14,7 +14,6 @@ export class SemzoomCanvas extends LitElement {
 
   render() {
     return html`
-      <button>&larr; BACK</button>
       <main><slot name="content"></slot></main>
       <aside hidden></aside>
     `;
@@ -26,7 +25,8 @@ export class SemzoomCanvas extends LitElement {
   }
 
   load(data: SemzoomContent, animate: boolean = false) {
-    if (animate) {}
+    if (animate) {
+    }
     this.main.innerHTML = this.contenter.make_content(data);
   }
 

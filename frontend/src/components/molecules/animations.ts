@@ -24,19 +24,19 @@ export const animationStyles = css`
 
   @keyframes slide-right {
     0% {
-      transform: translateX(calc(-1 * var(--menu-width, 200px)));
+      transform: translateX(0);
     }
     100% {
-      transform: translateX(0px);
+      transform: translateX(var(--menu-width, 200px));
     }
   }
 
   @keyframes slide-left {
     0% {
-      transform: translateX(0);
+      transform: translateX(var(--menu-width, 200px));
     }
     100% {
-      transform: translateX(calc(-1 * var(--menu-width, 200px)));
+      transform: translateX(0);
     }
   }
 
