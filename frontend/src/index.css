@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -13,13 +13,25 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
+  /* Semzoom variables */
   --menu-width: 300px;
+  --font-size: 14px;
+  --link-color: rgb(23, 112, 202);
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+}
+
+a {
+  color: var(--link-color, "#00f");
+}
+
+a:visited {
+  color: var(--link-color, "#00f");
 }

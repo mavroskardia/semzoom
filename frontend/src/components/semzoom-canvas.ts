@@ -4,30 +4,24 @@ import { customElement, query } from "lit/decorators.js";
 import { SemzoomContent } from "../types/content";
 import { SemzoomContenter } from "../lib/contenter";
 import { animationStyles } from "./molecules/animations";
+import { EntityComponentSystem } from "../ecs/ecs";
 
 @customElement("semzoom-canvas")
 export class SemzoomCanvas extends LitElement {
-  @query("main") main!: HTMLElement;
+  @query("canvas") canvas!: HTMLCanvasElement;
   @query("aside") buffer!: HTMLElement;
 
   contenter = new SemzoomContenter();
+  ecs = new EntityComponentSystem();
 
   render() {
-    return html`
-      <main><slot name="content"></slot></main>
-      <aside hidden></aside>
-    `;
+    return html`<canvas></canvas>`;
   }
 
-  firstUpdated() {
-    this.main.addEventListener("animationend", () => {});
-    this.buffer.addEventListener("animationend", () => {});
-  }
-
-  load(data: SemzoomContent, animate: boolean = false) {
-    if (animate) {
-    }
-    this.main.innerHTML = this.contenter.make_content(data);
+  load(data: SemzoomContent) {
+    this.ecs.init(this.canvas, data);
+    this.ecs.temp_init();
+    requestAnimationFrame(this.ecs.loop.bind(this.ecs));
   }
 
   static styles = [
@@ -39,25 +33,6 @@ export class SemzoomCanvas extends LitElement {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-      }
-
-      aside {
-        position: absolute;
-        z-index: 2;
-        pointer-events: none;
-      }
-
-      main {
-        z-index: 1;
-        display: block;
-        border: solid 1px #f90;
-      }
-
-      button {
-        position: absolute;
-        top: 1rem;
-        left: 4rem;
-        height: 26px;
       }
     `,
   ];

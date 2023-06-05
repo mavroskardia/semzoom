@@ -52,7 +52,7 @@ export class SemZoom extends LitElement {
     return html`
       <semzoom-nav></semzoom-nav>
       <button @click="${this.up}" ?hidden="${this.current_parentid == -1}">
-        <span class="mirror-h rotate-right">&#10149;</span> UP
+        <span class="ib mirror-h rotate-right larger text-shadow-1">&#10149;</span> UP
       </button>
       <semzoom-canvas @semzoomup="${this.up}">
         <div id="content" slot="content"></div>
