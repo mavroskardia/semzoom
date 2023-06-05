@@ -1,51 +1,41 @@
 import { LitElement, html, css } from "lit";
 import { customElement, query } from "lit/decorators.js";
+
 import { SemzoomContent } from "../types/content";
 import { SemzoomContenter } from "../lib/contenter";
+import { animationStyles } from "./molecules/animations";
+import { EntityComponentSystem } from "../ecs/ecs";
 
 @customElement("semzoom-canvas")
 export class SemzoomCanvas extends LitElement {
-  @query("main") main!: HTMLElement;
-  @query('aside.buffer') buffer!: HTMLElement;
+  @query("canvas") canvas!: HTMLCanvasElement;
+  @query("aside") buffer!: HTMLElement;
 
   contenter = new SemzoomContenter();
-
-  static styles = [
-    css`
-      :host {
-        display: flex;
-        justify-content: center;
-      }
-      .buffer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(255,255,255,0.25);
-      }
-    `,
-  ];
-
-  connectedCallback(): void {
-    this.buffer.hidden = true;
-  }
+  ecs = new EntityComponentSystem();
 
   render() {
-    return html`<aside class="buffer"></aside><main></main>`;
+    return html`<canvas></canvas>`;
   }
 
   load(data: SemzoomContent) {
-    this.buffer.innerHTML = this.main.innerHTML;
-    this.main.hidden = true;
-    this.main.innerHTML = this.contenter.make_content(data);
-    this.buffer.hidden = false;
-    this.animate_swap();
+    this.ecs.init(this.canvas, data);
+    this.ecs.temp_init();
+    requestAnimationFrame(this.ecs.loop.bind(this.ecs));
   }
 
-  animate_swap() {
-    // where this gets interesting. need to animate one element to the
-    // other in a meaningful way, but I have no idea how to do it (yet).
-  }
-
+  static styles = [
+    animationStyles,
+    css`
+      :host {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+    `,
+  ];
 }
 
 declare global {

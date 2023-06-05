@@ -5,18 +5,6 @@ import { customElement, property } from "lit/decorators.js";
 export class SemzoomTesting extends LitElement {
   @property({ type: Object }) data: any;
 
-  static styles = [
-    css`
-      :host {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 100%;
-        justify-content: center;
-      }
-    `,
-  ];
-
   render() {
     return html` <button @click="${this.load_example}">Load Example</button> `;
   }
@@ -31,6 +19,18 @@ export class SemzoomTesting extends LitElement {
     });
     this.dispatchEvent(event);
   }
+
+  static styles = [
+    css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
+      }
+    `,
+  ];
 }
 
 declare global {

@@ -1,11 +1,33 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
-import { animationStyles } from "../animations";
+import { customElement, query } from "lit/decorators.js";
+import { animationStyles } from "./molecules/animations";
 import "./semzoom-testing";
 
 @customElement("semzoom-nav")
 export class SemzoomNav extends LitElement {
   @query("nav") nav!: HTMLElement;
+
+  render() {
+    return html`
+      <nav>
+        <semzoom-testing @test="${this.toggle}"></semzoom-testing>
+      </nav>
+      <button @click="${this.toggle}">
+        <svg viewBox="0 0 10 8" width="30">
+          <path d="M1 1h8M1 4h 8M1 7h8" />
+        </svg>
+      </button>
+    `;
+  }
+
+  toggle() {
+    this.nav.classList.toggle("opened");
+    if (!this.nav.classList.contains('opened')) {
+      this.nav.classList.add('closing');
+    } else {
+      this.nav.classList.remove('closing');
+    }
+  }
 
   static styles = [
     animationStyles,
@@ -41,32 +63,20 @@ export class SemzoomNav extends LitElement {
         border-right: solid 1px #444;
         z-index: 0;
         top: 0;
+        left: calc(-1 * var(--menu-width, 200px));
         background-color: rgba(255, 255, 255, 0.1);
-        animation: slide-left 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       }
 
       .opened {
         animation: slide-right 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       }
+
+      .closing {
+        animation: slide-left 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
     `,
   ];
-
-  render() {
-    return html`
-      <nav class="closed">
-        <semzoom-testing></semzoom-testing>
-      </nav>
-      <button @click="${this.toggle}">
-        <svg viewBox="0 0 10 8" width="30">
-          <path d="M1 1h8M1 4h 8M1 7h8" />
-        </svg>
-      </button>
-    `;
-  }
-
-  toggle() {
-    this.nav.classList.toggle("opened");
-  }
 }
 
 declare global {
