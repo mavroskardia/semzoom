@@ -8,4 +8,8 @@ export class Entity {
     this.id = id;
     this.components = components;
   }
+
+  get<T>(ctype: string) : T {
+    return this.components.find((c) => c.constructor.name == ctype) as T;
+  }
 }

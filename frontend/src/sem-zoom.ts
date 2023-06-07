@@ -68,7 +68,7 @@ export class SemZoom extends LitElement {
 
   set_topic_id(topicid: number) {
     this.current_topic = this.find_topic_by_id(this.content, topicid);
-    this.thecanvas.load(this.current_topic, true);
+    this.thecanvas.load(this.current_topic);
 
     const newurl =
       this.content.id == topicid

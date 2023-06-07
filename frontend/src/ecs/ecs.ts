@@ -1,20 +1,6 @@
 import { SemzoomContent } from "../types/content";
-import { Animated } from "./components/animated";
-import { Box } from "./components/box";
-import { SimpleRenderable } from "./components/renderable";
-import { ECSText } from "./components/text";
 import { Entity } from "./entity";
-import { AnimatorSystem } from "./systems/animator";
-import { CanvasRenderingSystem } from "./systems/canvas";
 import { System } from "./systems/system";
-import { TextRendererSystem } from "./systems/text";
-import { Dimensions, Vec2 } from "./types";
-
-function intersect<T>(setA: Set<T>, setB: Set<T>, ...args: Set<T>[]): Set<T> {
-  const intersection = new Set<T>([...setA].filter((i) => setB.has(i)));
-  if (args.length === 0) return intersection;
-  return intersect(intersection, args.shift() ?? new Set<T>(), ...args);
-}
 
 export class EntityComponentSystem {
   canvas!: HTMLCanvasElement;
@@ -23,26 +9,7 @@ export class EntityComponentSystem {
 
   // temporary in-memory init configurations
   temp_init() {
-    this.add_system(new CanvasRenderingSystem("crs", this.canvas));
-    this.add_system(
-      new AnimatorSystem(new Dimensions(this.canvas.width, this.canvas.height))
-    );
-    this.add_system(
-      new TextRendererSystem(
-        this.canvas.getContext("2d") as CanvasRenderingContext2D
-      )
-    );
-    const entity1 = new Entity("box", [
-      new SimpleRenderable(),
-      new Box(),
-      new Animated(0.5, 0.5),
-    ]);
-    const entity2 = new Entity("text1", [
-      new SimpleRenderable(new Vec2(100, 100)),
-      new ECSText("Hello, World!"),
-    ]);
-    this.add_entity(entity1);
-    this.add_entity(entity2);
+    const ctx = this.canvas.getContext("2d") as CanvasRenderingContext2D;
   }
 
   add_entity(entity: Entity) {
@@ -100,7 +67,7 @@ export class EntityComponentSystem {
    * @param canvas For systems that require an outlet for renderables
    * @param szcontent The current scene's data
    */
-  init(canvas: HTMLCanvasElement, szcontent: SemzoomContent) {
-    this.canvas = canvas;
+  init(canvas: HTMLElement, szcontent: SemzoomContent) {
+    debugger;
   }
 }
